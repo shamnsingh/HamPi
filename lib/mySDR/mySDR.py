@@ -13,5 +13,8 @@ class mySDR:
         self.sdr.center_freq = fc
 
     # Read samples and write them into a queue.
-    def read_samples(self, Q, n):
-        Q.put(self.sdr.read_samples(n))
+    def read_samples(self, Q, t):
+        Q.put(self.sdr.read_samples(256000 * t))
+
+    def close():
+        self.sdr.close()

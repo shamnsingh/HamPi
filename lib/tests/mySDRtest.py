@@ -1,11 +1,11 @@
-from ..mySDR import mySDR
+from ..mySDR.mySDR import * 
 import Queue
 from myPass import *
 
 # Run tests here.
 
 # Initialization
-sdr = mySDR.mySDR()
+sdr = mySDR()
 
 if (sdr != None):
     myPass('Found SDR.')
@@ -32,3 +32,5 @@ if (not Q.empty()):
 else:
     myFail('Read samples.')
     exit(1)
+
+sdr.close()
