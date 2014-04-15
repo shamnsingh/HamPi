@@ -16,5 +16,5 @@ class mySDR:
     def read_samples(self, Q, t):
         Q.put(self.sdr.read_samples(256000 * t))
 
-    def close():
+    def close(self):
         self.sdr.close()

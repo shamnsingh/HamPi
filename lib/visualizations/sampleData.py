@@ -2,7 +2,7 @@ from ..utils.spectrogram import *
 from ..mySDR.mySDR import *
 import Queue
 
-t = 0.2
+t = 0.5
 
 # Read samples and continuously plot the spectrogram.
 sdr = mySDR()
@@ -16,7 +16,7 @@ sdr.set_up(fs, fc, gain)
 sdr.read_samples(Q, t)
 y = Q.get()
 m = 128
-h = myspectrogram_hann_ovlp(y, m, fs, fc)
+myspectrogram_hann_ovlp(y, m, fs, fc)
 show(block=False)
 
 while (True):

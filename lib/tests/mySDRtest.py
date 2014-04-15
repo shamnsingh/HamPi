@@ -1,6 +1,6 @@
 from ..mySDR.mySDR import * 
 import Queue
-from myPass import *
+from ..utils.myPass import *
 
 # Run tests here.
 
@@ -22,7 +22,7 @@ Q = Queue.Queue()
 sdr.set_up(fs, fc, gain)
 
 try:
-    sdr.read_samples(Q, 256000 * 1)
+    sdr.read_samples(Q, 1)
 except IOError:
     myFail('Error while reading.')
     exit(1)
