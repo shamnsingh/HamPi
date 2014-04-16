@@ -27,11 +27,10 @@ def sg_plot( t_range, f_range, y, dbf = 60) :
     
     fig=figure(figsize=(15,6))
     
-    h = plt.imshow( np.flipud( 64.0*(y_log + dbf)/dbf ), extent= t_range  + f_range ,cmap=plt.cm.gray, aspect='auto')
+    plt.imshow( np.flipud( 64.0*(y_log + dbf)/dbf ), extent= t_range  + f_range ,cmap=plt.cm.gray, aspect='auto')
     plt.xlabel('Time, s')
     plt.ylabel('Frequency, Hz')
     plt.tight_layout()
-    return h
 
 
 def myspectrogram_hann_ovlp(x, m, fs, fc,dbf = 60):

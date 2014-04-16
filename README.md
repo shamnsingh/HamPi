@@ -2,6 +2,8 @@ V
 cal responsive HAM Radio interface
 
 tests:
+    
+    # Execute tests to check if SDR is recognized and samples can be read.
     bash run_tests.sh
 
 visualizations:

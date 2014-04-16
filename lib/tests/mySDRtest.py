@@ -5,7 +5,11 @@ from ..utils.myPass import *
 # Run tests here.
 
 # Initialization
-sdr = mySDR()
+try:
+    sdr = mySDR()
+except IOError:
+    myFail('SDR not found.')
+    exit(1)    
 
 if (sdr != None):
     myPass('Found SDR.')
