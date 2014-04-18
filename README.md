@@ -1,12 +1,14 @@
-V
-cal responsive HAM Radio interface
+Vocal responsive HAM Radio interface
 
-tests:
+Tests:
     
     # Execute tests to check if SDR is recognized and samples can be read.
     bash run_tests.sh
 
-visualizations:
+    # Check that recording works properly.
+    bash run_fmDemodtest.sh
+
+Visualizations:
 
     # Displays spectrogram of data of being read.
-    python -m lib.visualizations.sampleData
+    bash run_sampleData.sh
