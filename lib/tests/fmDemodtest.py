@@ -5,21 +5,24 @@ from ..myAudio.myAudio import *
 from numpy.fft import *
 import Queue
 
-t = 2
+t = 5
 sdr = mySDR()
 fs = 240e3
 offset = 20e3
 fc = 443.670e6 - offset
 gain = 10
-m = 128
+m = 1024 
 
 Q = Queue.Queue()
 sdr.set_up(fs, fc, gain)
 
+print("\nSDR is reading at fc:" + str(fc / 1e6) + " MHz.")
 raw_input("Press ENTER and record sound for " + str(t) + " seconds. ")
 
 sdr.read_samples(Q, t)
 y = Q.get()
+
+y = np.concatenate([y, np.zeros(len(y))])
 
 figure(figsize=(15, 6))
 myspectrogram_hann_ovlp(y, m, fs, fc)
@@ -28,13 +31,20 @@ fm = fmDemod()
 data = fm.completeDemod(y, 128, 20e3, fs, 1)
 data_ds = fm.completeDemod(y, 128, 20e3, fs, 5)
 
-show()
-
 player = myAudio()
 
 player.play_audio(data_ds, 48000)
 
 player.terminate()
+
+figure(figsize=(15, 6))
+myspectrogram_hann_ovlp(data_ds, m, fs * 1.0 / 5, 0)
+
+figure(figsize=(15, 6))
+plt.plot(data_ds)
+show()
+
+exit(0)
 
 print "Computing DFT..."
 
