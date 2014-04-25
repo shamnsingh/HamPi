@@ -3,7 +3,9 @@ from ..utils.spectrogram import *
 from word_class import *
 
 class db:
-    
+    path = 'lib/db/words/'
+
+
     # Initiate the database construction.
     def __init__(self, words, t, m, cutoff, sdr, Q, fm, player):
         self.words = words
@@ -20,46 +22,59 @@ class db:
         fs = self.sdr.sdr.sample_rate
         fc = self.sdr.sdr.center_freq
 
-        for word in self.words:
-            raw_input('ENTER and speak "' + word + '" ...')
-           
-            # Fetch data.
-            self.sdr.read_samples(self.Q, self.t)
-            y = self.Q.get()
-            
-            figure(figsize=(15, 6))
-            myspectrogram_hann_ovlp(y, self.m, fs, fc)
+        word_idx = 0
 
-            show(block=False)
+        while (word_idx < len(self.words)):
+            word = self.words[word_idx]
 
-            # Clip the spectrogram for data.
-            t_start = float(raw_input('Enter starting time: '))
-            t_end = float(raw_input('Enter ending time: '))
-
-            y_clip = y[round(fs * t_start) : round(fs * t_end)]
-
-            figure(figsize=(15, 6))
-            myspectrogram_hann_ovlp(y_clip, self.m, fs, fc)
-
-            data_ds = self.fm.completeDemod(y_clip, self.m, self.cutoff, fs, 5)
-
-            # Display clipped data.
-            figure(figsize=(5, 6))
-            myspectrogram_hann_ovlp(data_ds, self.m, fs * 1.0 / 5.0, 0)
-
-            figure(figsize=(15, 6))
-            plt.plot(data_ds)
-            show()
-
+            data_ds = self.recordQuery(word)
             word_obj = word_class(word, data_ds)            
-
-            raw_input('ENTER to play sound...')
-            self.player.play_audio(data_ds, 48000)
 
             # Save the file or not.
             save_ans = raw_input('Save sound? [y]: ')
     
             if (save_ans == 'y'):
-                word_obj.save()
+                word_obj.save(self.path)
+                word_idx = word_idx + 1
 
             print '\n'
+
+    def recordQuery(self, word):
+        fs = self.sdr.sdr.sample_rate
+        fc = self.sdr.sdr.center_freq
+
+        raw_input('ENTER and speak "' + word + '" ...')
+           
+
+        # Fetch data.
+        self.sdr.read_samples(self.Q, self.t)
+        y = self.Q.get()
+
+        figure(figsize=(15, 6))
+        myspectrogram_hann_ovlp(y, self.m, fs, fc)
+
+        show(block=False)
+
+        # Clip the spectrogram for data.
+        t_start = float(raw_input('Enter starting time: '))
+        t_end = float(raw_input('Enter ending time: '))
+
+        y_clip = y[round(fs * t_start) : round(fs * t_end)]
+
+        figure(figsize=(15, 6))
+        myspectrogram_hann_ovlp(y_clip, self.m, fs, fc)
+
+        data_ds = self.fm.completeDemod(y_clip, self.m, self.cutoff, fs, 5)
+
+        # Display clipped data.
+        figure(figsize=(5, 6))
+        myspectrogram_hann_ovlp(data_ds, self.m, fs * 1.0 / 5.0, 0)
+
+        figure(figsize=(15, 6))
+        plt.plot(data_ds)
+        show()
+
+        raw_input('ENTER to play sound...')
+        self.player.play_audio(data_ds, 48000)
+
+        return data_ds

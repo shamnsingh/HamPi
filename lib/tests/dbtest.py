@@ -9,7 +9,7 @@ t = 2
 sdr = mySDR()
 fs = 240e3
 offset = 20e3
-fc = 443.670e6 - offset
+fc = 94.1e6 - offset
 gain = 30
 m = 512
 cutoff = 6e3 
@@ -22,7 +22,7 @@ sdr.set_up(fs, fc, gain)
 fm = fmDemod()
 player = myAudio()
 
-words = ['email', 'text', 'call']
+words = ['shamn']
 
 database = db(words, t, m, cutoff, sdr, Q, fm, player)
 database.construct()

@@ -42,7 +42,7 @@ myspectrogram_hann_ovlp(data_ds, m, fs * 1.0 / 5, 0)
 
 figure(figsize=(15, 6))
 plt.plot(data_ds)
-show()
+
 
 exit(0)
 

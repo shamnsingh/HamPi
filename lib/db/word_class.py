@@ -9,5 +9,5 @@ class word_class:
 
     # Save word locally.
 
-    def save(self):
-        np.save('lib/db/words/' + self.word + '.npy', self.signal)
+    def save(self, path):
+        np.save(path + self.word + '.npy', self.signal)
