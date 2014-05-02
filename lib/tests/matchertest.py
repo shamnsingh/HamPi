@@ -8,7 +8,7 @@ from ..utils.dbScrape import *
 # Initiate SDR.
 t = 2
 sdr = mySDR()
-fs = 240e3
+fs = 256e3
 offset = 20e3
 fc = 443.670e6 - offset
 gain = 30
@@ -24,7 +24,7 @@ fm = fmDemod()
 player = myAudio()
 
 database = db([], t, m, cutoff, sdr, Q, fm, player)
-query = database.recordQuery()
+query = database.recordQuery('')
 
 # Initiate scraper:
 scraper = dbScrape()
@@ -34,7 +34,7 @@ scraper.scrape(100, 100)
 scraper.normalize()
 
 storage = scraper.storage
-query_trunc = scraper.truncateSig(query, 100, 100)
+query_trunc = scraper.truncateSig(query, 1000, 1000)
 query_norm = scraper.normalizeSig(query_trunc)
 
 corr_metric = {}
@@ -50,6 +50,15 @@ for word in storage.keys():
 
 plt.show(block=False)
 print corr_metric, '\n'
-print "You said " + corr_metric[sorted(corr_metric, reverse=True)[0]]
+
+# Sort metric and print out results.
+sorted_metric = sorted(corr_metric, reverse=True)
+max_metric = corr_metric[sorted_metric[0]]
+max_thres = 0.07
+
+if (sorted_metric[0] > max_thres):
+    print "You said " + max_metric
+else:
+    print "Nothing matched."
 
 raw_input("\nPress ENTER to exit...")

@@ -16,7 +16,7 @@ from scipy import integrate
 # y -- spectrogram, nf by nt array
 # dbf -- Dynamic range of the spect
 
-def sg_plot( t_range, f_range, y, dbf = 60) :
+def sg_plot( t_range, f_range, y, title, dbf = 60) :
     eps = 1e-3
     
     # find maximum
@@ -26,12 +26,12 @@ def sg_plot( t_range, f_range, y, dbf = 60) :
     y_log = 20.0 * np.log10( abs( y ) / y_max + eps )
     
     plt.imshow( np.flipud( 64.0*(y_log + dbf)/dbf ), extent= t_range  + f_range ,cmap=plt.cm.gray, aspect='auto')
+    plt.title(title)
     plt.xlabel('Time, s')
     plt.ylabel('Frequency, Hz')
 #    plt.tight_layout()
 
-
-def myspectrogram_hann_ovlp(x, m, fs, fc,dbf = 60):
+def myspectrogram_hann_ovlp(x, m, fs, fc,dbf = 60, title=''):
     # Plot the spectrogram of x.
     # First take the original signal x and split it into blocks of length m
     # This corresponds to using a rectangular window %
@@ -58,8 +58,8 @@ def myspectrogram_hann_ovlp(x, m, fs, fc,dbf = 60):
     if isreal_bool:
         f_range = [ fc, fs / 2.0 + fc]
         xmf = np.fft.fft(xmw,len(xmw),axis=0)
-        return sg_plot(t_range, f_range, xmf[0:m/2,:],dbf=dbf)
+        return sg_plot(t_range, f_range, xmf[0:m/2,:],title,dbf=dbf)
     else:
         f_range = [-fs / 2.0 + fc, fs / 2.0 + fc]
         xmf = np.fft.fftshift( np.fft.fft( xmw ,len(xmw),axis=0), axes=0 )
-        return sg_plot(t_range, f_range, xmf,dbf = dbf)
+        return sg_plot(t_range, f_range, xmf,title,dbf = dbf)

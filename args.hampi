@@ -1,0 +1,10 @@
+t=1
+fs=256e3
+offset=20e3
+fc=443.670e6
+gain=30
+m=512
+cutoff=6e3
+match_thres=0.1
+process_delay=3
+matcher_delay=1

@@ -62,7 +62,7 @@ class db:
         y_clip = y[round(fs * t_start) : round(fs * t_end)]
 
         figure(figsize=(15, 6))
-        myspectrogram_hann_ovlp(y_clip, self.m, fs, fc)
+        myspectrogram_hann_ovlp(self.fm.demod(y_clip), self.m, fs, 0)
 
         data_ds = self.fm.completeDemod(y_clip, self.m, self.cutoff, fs, 5)
 
@@ -72,9 +72,30 @@ class db:
 
         figure(figsize=(15, 6))
         plt.plot(data_ds)
-        show()
+        show(block=False)
 
         raw_input('ENTER to play sound...')
         self.player.play_audio(data_ds, 48000)
 
         return data_ds
+
+    def recordContinously(self):
+        fs = self.sdr.sdr.sample_rate
+        fc = self.sdr.sdr.center_freq
+        # Fetch data.
+        counter = 0
+        while (counter < 5):
+            self.sdr.read_samples(self.Q, self.t)
+            print 'Q_record size: ', self.Q.qsize()
+            counter = counter + 1
+
+    def processContinously(self, Qout):
+        fs = self.sdr.sdr.sample_rate
+        fc = self.sdr.sdr.center_freq
+
+        # Process data.
+        while (not self.Q.empty()):
+            data = self.Q.get()
+            data_ds = self.fm.completeDemod(data, self.m, self.cutoff, fs, 5)
+            Qout.put(data_ds)
+            print 'Q_process size: ', Qout.qsize()

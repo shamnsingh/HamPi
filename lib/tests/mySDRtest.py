@@ -26,7 +26,7 @@ Q = Queue.Queue()
 sdr.set_up(fs, fc, gain)
 
 try:
-    sdr.read_samples(Q, 1)
+    sdr.read_samples(Q, 0.1)
 except IOError:
     myFail('Error while reading.')
     exit(1)

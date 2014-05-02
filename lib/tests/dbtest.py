@@ -7,9 +7,9 @@ import Queue
 # Initiate SDR.
 t = 2
 sdr = mySDR()
-fs = 240e3
+fs = 256e3
 offset = 20e3
-fc = 94.1e6 - offset
+fc = 443.670e6 - offset
 gain = 30
 m = 512
 cutoff = 6e3 
