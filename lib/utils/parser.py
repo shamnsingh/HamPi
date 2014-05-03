@@ -12,3 +12,15 @@ def parse(path):
 
     f.close()
     return args
+
+def parseString(path):
+    args = {}
+
+    f = open(path, 'r')
+
+    for line in f:
+        s = line.split('=')
+        args[s[0]] = s[1] 
+
+    f.close()
+    return args

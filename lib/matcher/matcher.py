@@ -4,6 +4,7 @@ from ..utils.correlator import *
 from ..utils.spectrogram import *
 import numpy as np
 import multiprocessing
+import threading
 
 from numpy import *
 from matplotlib.pyplot import *
@@ -38,16 +39,18 @@ class matcher:
            result = self.corr.correlate(query_norm, self.storage[word])
            corr_metric[max(result)] = word
 
-        sorted_metric = sorted(corr_metric, reverse=True)
-        max_word = corr_metric[sorted_metric[0]]
+        sorted_metric = corr_metric.items()
+        sorted_metric.sort(reverse=True)
+        max_word = corr_metric[sorted_metric[0][0]]
 
-        if (sorted_metric[0] > self.match_thres):
-            return (max_word, corr_metric)
+        
+        if (sorted_metric[0][0] > self.match_thres):
+            return (max_word, sorted_metric)
         else:
-            return (None, corr_metric)
+            return (None, sorted_metric)
 
     # Carries out the Queue matching.
-    def match_Queue(self, Q, match_N=5):
+    def match_Queue(self, Q, executor, match_N=2):
         # Match decides how much data to skip in vicinity.
         
         counter = 0
@@ -56,17 +59,22 @@ class matcher:
             query = Q.get()
 
             if (match == 0):
-                (max_word, corr_metric) = self.match(query, counter)
+                (max_word, sorted_metric) = self.match(query, counter)
+               
             else:
-                (max_word, corr_metric) = (None, None)
+                (max_word, sorted_metric) = (None, None)
 
             if (max_word):
                 print str(counter), ': ', max_word
                 match = match_N
+                 
+                # Initiates the action of the command.
+                t_action = threading.Thread(target = executor.action, args = (max_word,))
+                t_action.start()
             else:
                 print str(counter), ': ', 'Nothing.'
 
             match = match - 1 if (match != 0) else match
-            print corr_metric, '\n'
+            print sorted_metric, '\n'
             counter = counter + 1
         print 'Done matching.'

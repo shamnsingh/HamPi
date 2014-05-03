@@ -9,6 +9,7 @@ import threading, time
 from ..utils.dbScrape import *
 from ..utils.parser import *
 import sys, os
+from ..execute.executor import *
 
 from numpy import *
 from matplotlib.pyplot import *
@@ -27,6 +28,7 @@ progress = open(sys.argv[2], 'w')
 sys.stderr = open(sys.argv[3], 'rw')
 
 myMatcher = matcher(args['match_thres'], args['m'], args['fs'])
+myExecutor = executor()
 Q_record = Queue.Queue()
 Q_process = Queue.Queue()
 
@@ -50,7 +52,7 @@ t_process.start()
 time.sleep(args['matcher_delay'])
 
 try:
-    myMatcher.match_Queue(Q_process)
+    myMatcher.match_Queue(Q_process, myExecutor)
 except KeyboardInterrupt:
     print 'Exiting...'
     progress.close()
