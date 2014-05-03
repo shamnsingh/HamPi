@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 from numpy import *
 from matplotlib.pyplot import *
 
-m = 1024
+m = 512
 fs = 256e3 
 
 scraper = dbScrape()
 
 # Drops 100 samples at the beginning and end.
 scraper.scrape(100, 100)
-scraper.normalize()
+#scraper.normalize()
 
 storage = scraper.storage
 

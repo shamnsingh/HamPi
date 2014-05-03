@@ -1,1 +1,1 @@
-python -m lib.tests.mySDRtest
+python -m "lib.tests."$1"test" 

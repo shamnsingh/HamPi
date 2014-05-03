@@ -1,10 +1,12 @@
-t=1
+t=0.05
 fs=256e3
 offset=20e3
 fc=443.670e6
-gain=30
+gain=10
 m=512
-cutoff=6e3
-match_thres=0.1
-process_delay=3
+cutoff=5e3
+match_thres=0.15
+process_delay=1
 matcher_delay=1
+taps=512
+buff_size=10

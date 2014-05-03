@@ -6,12 +6,12 @@ import Queue
 from ..utils.dbScrape import *
 
 # Initiate SDR.
-t = 2
+t = 1
 sdr = mySDR()
 fs = 256e3
 offset = 20e3
 fc = 443.670e6 - offset
-gain = 30
+gain = 10
 m = 512
 cutoff = 6e3 
 

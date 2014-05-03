@@ -21,7 +21,7 @@ class matcher:
        self.match_thres = match_thres
        self.m = m
        self.fs = fs
-       self.f = figure(figsize=(5, 5))
+       self.f = figure(figsize=(6, 8))
        show(block=False)
 
     # Carries out the actual database matching.
@@ -49,15 +49,15 @@ class matcher:
     # Carries out the Queue matching.
     def match_Queue(self, Q):
         counter = 0
-        while (not Q.empty()):
+        while (1):
             query = Q.get()
 
             (max_word, corr_metric) = self.match(query, counter)
             if (max_word):
-                print max_word
+                print str(counter), ': ', max_word
             else:
-                print "Nothing."
+                print str(counter), ': ', 'Nothing.'
 
-            print corr_metric
+            print corr_metric, '\n'
             counter = counter + 1
         print 'Done matching.'

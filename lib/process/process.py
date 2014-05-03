@@ -13,16 +13,18 @@ import sys, os
 from numpy import *
 from matplotlib.pyplot import *
 
+sys.stderr = open('debug.log', 'rw')
 rcParams['figure.max_open_warning'] = 200
 
 def usage():
-    print 'python -m lib.process.py [file]'
+    print 'python -m lib.process.py [args_file] [progress_file]'
 
-if (len(sys.argv) != 2):
+if (len(sys.argv) != 3):
     usage()
     exit(0)
 
 args = parse(sys.argv[1])
+progress = open(sys.argv[2], 'w')
 myMatcher = matcher(args['match_thres'], args['m'], args['fs'])
 Q_record = Queue.Queue()
 Q_process = Queue.Queue()
@@ -35,26 +37,22 @@ database = db([], args['t'], args['m'], args['cutoff'], sdr, Q_record, fmDemod()
 
 raw_input('ENTER to record continously ...')
 
-t_record = threading.Thread(target = database.recordContinously, args = ())
+t_record = threading.Thread(target = database.recordContinously, args = (progress,))
 t_record.start()
 
 time.sleep(args['process_delay'])
 
 # Stores data_ds in Q_process.
-t_process = threading.Thread(target = database.processContinously, args = (Q_process,))
+t_process = threading.Thread(target = database.processContinously, args = (Q_process, progress, args['buff_size'], args['taps']))
 t_process.start()
 
 time.sleep(args['matcher_delay'])
-
-# Match the data from the processing Queue to words.
-#t_match = threading.Thread(target = myMatcher.match_Queue, args = (Q_process,))
-#t_match.start()
-
 
 try:
     myMatcher.match_Queue(Q_process)
 except KeyboardInterrupt:
     print 'Exiting...'
+    progress.close()
     os._exit(0)
 
 # Hackish listener that exits from keyboard interrupt.

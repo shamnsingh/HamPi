@@ -64,7 +64,7 @@ class db:
         figure(figsize=(15, 6))
         myspectrogram_hann_ovlp(self.fm.demod(y_clip), self.m, fs, 0)
 
-        data_ds = self.fm.completeDemod(y_clip, self.m, self.cutoff, fs, 5)
+        data_ds = self.fm.completeDemod(y_clip, 512, self.cutoff, fs, 5)
 
         # Display clipped data.
         figure(figsize=(5, 6))
@@ -79,23 +79,25 @@ class db:
 
         return data_ds
 
-    def recordContinously(self):
+    def recordContinously(self, progress):
         fs = self.sdr.sdr.sample_rate
         fc = self.sdr.sdr.center_freq
         # Fetch data.
-        counter = 0
-        while (counter < 5):
+        while (1):
             self.sdr.read_samples(self.Q, self.t)
-            print 'Q_record size: ', self.Q.qsize()
-            counter = counter + 1
+            progress.write('Q_record size: ' + str(self.Q.qsize()) + '\n')
 
-    def processContinously(self, Qout):
+    def processContinously(self, Qout, progress, N, taps):
         fs = self.sdr.sdr.sample_rate
         fc = self.sdr.sdr.center_freq
 
-        # Process data.
-        while (not self.Q.empty()):
-            data = self.Q.get()
-            data_ds = self.fm.completeDemod(data, self.m, self.cutoff, fs, 5)
-            Qout.put(data_ds)
-            print 'Q_process size: ', Qout.qsize()
+        # Accumulate data in a buffer and process.
+
+        while (1):
+            buff = np.array([])
+            
+            for i in range(int(N)):
+                buff = np.append(buff, self.Q.get())
+          
+            Qout.put(self.fm.completeDemod(buff, taps, self.cutoff, fs, 5))
+            progress.write('Q_process size: ' + str(Qout.qsize()) + '\n')

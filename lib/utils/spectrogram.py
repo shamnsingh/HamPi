@@ -63,3 +63,28 @@ def myspectrogram_hann_ovlp(x, m, fs, fc,dbf = 60, title=''):
         f_range = [-fs / 2.0 + fc, fs / 2.0 + fc]
         xmf = np.fft.fftshift( np.fft.fft( xmw ,len(xmw),axis=0), axes=0 )
         return sg_plot(t_range, f_range, xmf,title,dbf = dbf)
+
+def return_image(x, m, dbf = 60):
+    # pad x up to a multiple of m 
+    lx = len(x);
+    nt = (lx + m - 1) // m
+    x = append(x,zeros(-lx+nt*m))
+    x = x.reshape((m/2,nt*2), order='F')
+    x = concatenate((x,x),axis=0)
+    x = x.reshape((m*nt*2,1),order='F')
+    x = x[r_[m//2:len(x),ones(m//2)*(len(x)-1)].astype(int)].reshape((m,nt*2),order='F')
+        
+    
+    xmw = x * hanning(m)[:,None];
+    xmf = np.fft.fft(xmw,len(xmw),axis=0)
+    y = xmf[0:m/2, :]
+
+    eps = 1e-3
+    
+    # find maximum
+    y_max = abs(y).max()
+    
+    # compute 20*log magnitude, scaled to the max
+    y_log = 20.0 * np.log10( abs( y ) / y_max + eps )
+    
+    return np.flipud( 64.0*(y_log + dbf)/dbf )
