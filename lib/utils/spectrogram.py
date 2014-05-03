@@ -87,4 +87,4 @@ def return_image(x, m, dbf = 60):
     # compute 20*log magnitude, scaled to the max
     y_log = 20.0 * np.log10( abs( y ) / y_max + eps )
     
-    return np.flipud( 64.0*(y_log + dbf)/dbf )
+    return np.flipud( 1.0*(y_log + dbf)/dbf )

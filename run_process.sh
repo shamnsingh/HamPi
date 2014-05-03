@@ -1,2 +1,2 @@
 #1 /bin/bash
-python -m lib.process.process $1 $2
+python -m lib.process.process $1 $2 $3

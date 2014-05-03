@@ -2,13 +2,10 @@ Vocal responsive HAM Radio interface
 
 Tests:
     
-    # Execute tests to check if SDR is recognized and samples can be read.
-    bash run_tests.sh
-
-    # Check that recording works properly.
-    bash run_fmDemodtest.sh
+    # Run tests from the directory with the following command.
+	./run_tests [test_name]
 
 Visualizations:
 
     # Displays spectrogram of data of being read.
-    bash run_sampleData.sh
+    ./run_sampleData

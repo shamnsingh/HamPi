@@ -13,7 +13,7 @@ scraper = dbScrape()
 
 # Drops 100 samples at the beginning and end.
 scraper.scrape(100, 100)
-#scraper.normalize()
+scraper.normalize()
 
 storage = scraper.storage
 

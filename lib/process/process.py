@@ -13,18 +13,19 @@ import sys, os
 from numpy import *
 from matplotlib.pyplot import *
 
-sys.stderr = open('debug.log', 'rw')
 rcParams['figure.max_open_warning'] = 200
 
 def usage():
-    print 'python -m lib.process.py [args_file] [progress_file]'
+    print 'python -m lib.process.py [args_file] [progress_file] [debug_file]'
 
-if (len(sys.argv) != 3):
+if (len(sys.argv) != 4):
     usage()
     exit(0)
 
 args = parse(sys.argv[1])
 progress = open(sys.argv[2], 'w')
+sys.stderr = open(sys.argv[3], 'rw')
+
 myMatcher = matcher(args['match_thres'], args['m'], args['fs'])
 Q_record = Queue.Queue()
 Q_process = Queue.Queue()
@@ -56,9 +57,9 @@ except KeyboardInterrupt:
     os._exit(0)
 
 # Hackish listener that exits from keyboard interrupt.
-try:
-    while (True):
-        continue
-except KeyboardInterrupt:
-    print 'Exiting...'
-    os._exit(0)
+#try:
+#    while (True):
+#        continue
+#except KeyboardInterrupt:
+#    print 'Exiting...'
+#    os._exit(0)

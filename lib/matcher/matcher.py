@@ -47,17 +47,26 @@ class matcher:
             return (None, corr_metric)
 
     # Carries out the Queue matching.
-    def match_Queue(self, Q):
+    def match_Queue(self, Q, match_N=5):
+        # Match decides how much data to skip in vicinity.
+        
         counter = 0
+        match = 0
         while (1):
             query = Q.get()
 
-            (max_word, corr_metric) = self.match(query, counter)
+            if (match == 0):
+                (max_word, corr_metric) = self.match(query, counter)
+            else:
+                (max_word, corr_metric) = (None, None)
+
             if (max_word):
                 print str(counter), ': ', max_word
+                match = match_N
             else:
                 print str(counter), ': ', 'Nothing.'
 
+            match = match - 1 if (match != 0) else match
             print corr_metric, '\n'
             counter = counter + 1
         print 'Done matching.'
