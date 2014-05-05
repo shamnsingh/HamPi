@@ -85,19 +85,26 @@ class db:
         # Fetch data.
         while (1):
             self.sdr.read_samples(self.Q, self.t)
-            progress.write('Q_record size: ' + str(self.Q.qsize()) + '\n')
+#            progress.write('Q_record size: ' + str(self.Q.qsize()) + '\n')
 
     def processContinously(self, Qout, progress, N, taps):
         fs = self.sdr.sdr.sample_rate
         fc = self.sdr.sdr.center_freq
 
         # Accumulate data in a buffer and process.
+        buff_first = np.array([])
+
+        for i in range(int(N) / 2):
+            buff_first = np.append(buff_first, self.Q.get())
 
         while (1):
-            buff = np.array([])
-            
-            for i in range(int(N)):
-                buff = np.append(buff, self.Q.get())
-          
+            buff_second = np.array([])
+
+            # Fetch the second N / 2 samples.
+            for i in range(int(N) / 2):
+                buff_second = np.append(buff_second, self.Q.get())
+
+            buff = np.concatenate([buff_first, buff_second])
+            buff_first = buff_second
             Qout.put(self.fm.completeDemod(buff, taps, self.cutoff, fs, 5))
             progress.write('Q_process size: ' + str(Qout.qsize()) + '\n')

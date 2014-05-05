@@ -13,7 +13,7 @@ scraper = dbScrape()
 
 # Drops 100 samples at the beginning and end.
 scraper.scrape(100, 100)
-scraper.normalize()
+#scraper.normalize()
 
 storage = scraper.storage
 
@@ -28,6 +28,7 @@ plt.show()
 for word in storage.keys():
     figure(figsize=(3, 6))
     myspectrogram_hann_ovlp(storage[word], m, fs * 1.0 / 5.0, 0,title=word)
+#    savefig('images/' + word + '.png', bbox_inches='tight')
 
 plt.show(block=False)
 

@@ -1,3 +1,5 @@
+# All arguments for the execution.
+
 t=0.05
 fs=256e3
 offset=20e3
@@ -9,4 +11,7 @@ match_thres=0.15
 process_delay=1
 matcher_delay=1
 taps=512
+
+# Buffer size must be even.
+
 buff_size=10

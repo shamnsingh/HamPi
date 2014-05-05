@@ -7,8 +7,13 @@ def parse(path):
     f = open(path, 'r')
 
     for line in f:
-        s = line.split('=')
-        args[s[0]] = float(s[1]) 
+        line = line.rstrip('\n')
+
+        if (line == ''):
+            continue
+        elif (line[0] != '#'):
+            s = line.split('=')
+            args[s[0]] = float(s[1]) 
 
     f.close()
     return args
@@ -20,7 +25,7 @@ def parseString(path):
 
     for line in f:
         s = line.split('=')
-        args[s[0]] = s[1] 
+        args[s[0]] = s[1].rstrip('\n') 
 
     f.close()
     return args

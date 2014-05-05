@@ -19,13 +19,12 @@ rcParams['figure.max_open_warning'] = 200
 def usage():
     print 'python -m lib.process.py [args_file] [progress_file] [debug_file]'
 
-if (len(sys.argv) != 4):
+if (len(sys.argv) != 3):
     usage()
     exit(0)
 
 args = parse(sys.argv[1])
 progress = open(sys.argv[2], 'w')
-sys.stderr = open(sys.argv[3], 'rw')
 
 myMatcher = matcher(args['match_thres'], args['m'], args['fs'])
 myExecutor = executor()
