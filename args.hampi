@@ -2,7 +2,7 @@
 
 t=0.05
 fs=256e3
-offset=20e3
+offset=0e3
 fc=443.670e6
 gain=10
 m=512
