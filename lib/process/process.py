@@ -51,7 +51,7 @@ t_process.start()
 time.sleep(args['matcher_delay'])
 
 try:
-    myMatcher.match_Queue(Q_process, myExecutor)
+    myMatcher.match_Queue(Q_process, myExecutor, args['diff_thres'])
 except KeyboardInterrupt:
     print 'Exiting...'
     progress.close()

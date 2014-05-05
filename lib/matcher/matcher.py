@@ -26,7 +26,7 @@ class matcher:
        show(block=False)
 
     # Carries out the actual database matching.
-    def match(self, query, counter):
+    def match(self, query, counter, diff_thres):
         query_trunc = self.scraper.truncateSig(query, 100, 100)
         query_norm = self.scraper.normalizeSig(query_trunc)
 
@@ -43,14 +43,15 @@ class matcher:
         sorted_metric.sort(reverse=True)
         max_word = corr_metric[sorted_metric[0][0]]
 
+        diff_metric = sorted_metric[0][0] - sorted_metric[1][0]
         
-        if (sorted_metric[0][0] > self.match_thres):
+        if ((sorted_metric[0][0] > self.match_thres) & (diff_metric > diff_thres)):
             return (max_word, sorted_metric)
         else:
             return (None, sorted_metric)
 
     # Carries out the Queue matching.
-    def match_Queue(self, Q, executor, match_N=2):
+    def match_Queue(self, Q, executor, diff_thres, match_N=2):
         # Match decides how much data to skip in vicinity.
         
         counter = 0
@@ -59,7 +60,7 @@ class matcher:
             query = Q.get()
 
             if (match == 0):
-                (max_word, sorted_metric) = self.match(query, counter)
+                (max_word, sorted_metric) = self.match(query, counter, diff_thres)
                
             else:
                 (max_word, sorted_metric) = (None, None)

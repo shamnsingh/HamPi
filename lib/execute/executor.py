@@ -7,8 +7,11 @@ path = 'personal_data/data.dat'
 class executor:
     def __init__(self):
         self.info = parseString(path)
-        self.possible_commands = {'email': emailer(self.info), 'text' : texter(self.info), 'one': lighter(self.info)}
-    
+        try:
+            self.possible_commands = {'two': emailer(self.info), 'text' : texter(self.info), 'one': lighter(self.info)}
+        except:
+            self.possible_commands = None
+
     def action(self, argument):
         try:
             obj = self.possible_commands[argument]

@@ -1,17 +1,18 @@
 # All arguments for the execution.
 
-t=0.05
+t=0.01
 fs=256e3
 offset=0e3
 fc=443.670e6
 gain=10
 m=512
 cutoff=5e3
-match_thres=0.15
+match_thres=0.10
 process_delay=1
 matcher_delay=1
-taps=512
+taps=256
+diff_thres=0.03
 
 # Buffer size must be even.
 
-buff_size=10
+buff_size=50
