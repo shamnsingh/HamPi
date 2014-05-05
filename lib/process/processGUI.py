@@ -53,7 +53,7 @@ class Example(Frame):
 
         time.sleep(args['matcher_delay'])
 
-        myMatcher.match_Queue(Q_process, myExecutor)
+        myMatcher.match_Queue(Q_process, myExecutor, args['diff_thres'])
    
     def close(self):
         print 'Exiting...'

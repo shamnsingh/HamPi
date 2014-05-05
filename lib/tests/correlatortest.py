@@ -29,7 +29,7 @@ for word in storage.keys():
     plt.legend(leg)
     ax = plt.gca()
     ax.grid(True)
-    print leg, max(result)
+    print leg,",",max(result)
 
 for pair in itertools.combinations(storage.keys(), 2):
     figure(figsize=(15,9))
@@ -39,7 +39,7 @@ for pair in itertools.combinations(storage.keys(), 2):
     plt.legend(leg)
     ax = plt.gca()
     ax.grid(True)
-    print leg, max(result)
+    print leg,",",max(result)
 
 plt.show(block=False)
 raw_input("\nPress ENTER to exit...")
